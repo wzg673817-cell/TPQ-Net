@@ -43,29 +43,16 @@ average recognition accuracy of **88.07%** across all seven signal conditions an
 ```text
 TPQ-Net/
 ├── README.md
-├── requirements.txt
+├── LICENSE
 ├── .gitignore
-├── .gitattributes
 ├── 01_build_dct3.py
 ├── 02_train_tpqnet.py
-├── VALIDATION_REPORT.md
 ├── data/
 │   ├── README.md
-│   ├── LFM_SEI_clean_iq.npz
-│   ├── LFM_SEI_30dB_iq.npz
-│   ├── LFM_SEI_20dB_iq.npz
-│   ├── LFM_SEI_15dB_iq.npz
-│   ├── LFM_SEI_10dB_iq.npz
-│   ├── LFM_SEI_5dB_iq.npz
-│   ├── LFM_SEI_0dB_iq.npz
-│   ├── split_622.npz
-│   ├── dataset_manifest.json
-│   ├── dataset_manifest.csv
-│   └── SHA256SUMS.txt
-├── generated/
+│   └── split_622.npz
+├── generated/                 # created locally by 01_build_dct3.py
 │   └── dct3/
-└── outputs/
-```
+└── outputs/                   # training results will be added later
 
 ## Dataset protocol
 
