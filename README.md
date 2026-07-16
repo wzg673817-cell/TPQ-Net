@@ -38,12 +38,6 @@ together with the exact experiment-ready LFM I/Q datasets used under clean, 30, 
 average recognition accuracy of **88.07%** across all seven signal conditions and
 **76.72%** over the 10, 5, and 0 dB low-SNR conditions.
 
-### Main contents
-
-- Experiment-ready multi-SNR LFM I/Q datasets with a fixed 6:2:2 split;
-- DCT-3T construction from variable-length effective-window I/Q samples;
-- End-to-end TPQ-Net training, validation, checkpoint selection, and testing;
-- Paper-consistent module names, hyperparameters, and evaluation metrics.
 ## Repository structure
 
 ```text
