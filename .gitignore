@@ -1,0 +1,13 @@
+__pycache__/
+*.py[cod]
+*.log
+*.pt
+*.pth
+*.ckpt
+.DS_Store
+.idea/
+.vscode/
+generated/dct3/*
+!generated/dct3/.gitkeep
+outputs/*
+!outputs/.gitkeep
