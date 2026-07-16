@@ -52,7 +52,7 @@ TPQ-Net/
 │   └── split_622.npz
 ├── generated/                 # created locally by 01_build_dct3.py
 │   └── dct3/
-└── outputs/                   # training results will be added later
+└── outputs/
 
 ## Dataset protocol
 
@@ -62,6 +62,7 @@ samples at every signal condition.
 For each emitter, the first 600 samples are used for training, the next 200 samples
 for validation, and the final 200 samples for testing. This fixed 6:2:2 split yields
 3,600 training samples, 1,200 validation samples, and 1,200 test samples in total.
+```
 ## Environment
 
 ```text
