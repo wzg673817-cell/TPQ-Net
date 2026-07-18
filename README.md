@@ -4,6 +4,20 @@ Official code and experiment-ready multi-SNR LFM I/Q dataset for:
 
 **TPQ-Net: A Trajectory-Pyramid Quality-Adaptive Metric Network for Low-SNR Radar Specific Emitter Identification**
 
+## Quick access
+
+| Resource | Link |
+|---|---|
+| Multi-SNR LFM I/Q dataset | [Download TPQ-Net Dataset v1.0](https://github.com/wzg673817-cell/TPQ-Net/releases/tag/v1.0.0) |
+| Pretrained TPQ-Net checkpoints | [Download TPQ-Net Checkpoints v1.0](https://github.com/wzg673817-cell/TPQ-Net/releases/tag/checkpoints-v1.0.0) |
+| Dataset instructions | [`data/README.md`](data/README.md) |
+| DCT-3T construction code | [`01_build_dct3.py`](01_build_dct3.py) |
+| Training code | [`02_train_tpqnet.py`](02_train_tpqnet.py) |
+| Testing code | [`03_test_tpqnet.py`](03_test_tpqnet.py) |
+| Experimental results | [`results/`](results/) |
+| Confusion matrices | [`results/confusion_matrices/`](results/confusion_matrices/) |
+| t-SNE visualizations | [`results/feature_visualization/`](results/feature_visualization/) |
+
 ## Overview
 
 Radar specific emitter identification (SEI) aims to distinguish individual emitters
@@ -33,8 +47,8 @@ embeddings, and the **Quality-Adaptive Cosine Margin Head (QACM Head)** adjusts 
 classification margin according to sample quality.
 
 This repository provides the paper-aligned implementation of DCT-3T and TPQ-Net,
-together with the exact experiment-ready LFM I/Q datasets used under clean, 30, 20,
-15, 10, 5, and 0 dB conditions. On the six-class LFM dataset, TPQ-Net achieves an
+together with the experiment-ready LFM I/Q datasets used under clean, 30, 20, 15,
+10, 5, and 0 dB conditions. On the six-class LFM dataset, TPQ-Net achieves an
 average recognition accuracy of **88.07%** across all seven signal conditions and
 **76.72%** over the 10, 5, and 0 dB low-SNR conditions.
 
@@ -47,13 +61,59 @@ TPQ-Net/
 ├── .gitignore
 ├── 01_build_dct3.py
 ├── 02_train_tpqnet.py
+├── 03_test_tpqnet.py
 ├── data/
 │   ├── README.md
 │   └── split_622.npz
+├── results/
+│   ├── main_results.csv
+│   ├── Recognition_accuracy_of_different_input_representations.csv
+│   ├── Recognition_accuracy_of_different_backbone_networks.csv
+│   ├── Ablation_study_results_recognition_accuracy.csv
+│   ├── confusion_matrices/
+│   └── feature_visualization/
 ├── generated/                 # created locally by 01_build_dct3.py
 │   └── dct3/
-└── outputs/
+└── outputs/                   # created locally during training and testing
 ```
+
+The seven released I/Q files are hosted in
+[TPQ-Net Dataset v1.0](https://github.com/wzg673817-cell/TPQ-Net/releases/tag/v1.0.0).
+After downloading, place them in the local `data/` directory.
+
+## Dataset and pretrained checkpoints
+
+### Dataset
+
+The complete experiment-ready dataset is available from:
+
+**[Download TPQ-Net Dataset v1.0](https://github.com/wzg673817-cell/TPQ-Net/releases/tag/v1.0.0)**
+
+The release contains:
+
+```text
+LFM_SEI_clean_iq.npz
+LFM_SEI_30dB_iq.npz
+LFM_SEI_20dB_iq.npz
+LFM_SEI_15dB_iq.npz
+LFM_SEI_10dB_iq.npz
+LFM_SEI_5dB_iq.npz
+LFM_SEI_0dB_iq.npz
+```
+
+The fixed dataset split is provided in
+[`data/split_622.npz`](data/split_622.npz), and additional dataset information is
+available in [`data/README.md`](data/README.md).
+
+### Pretrained checkpoints
+
+The seven best TPQ-Net checkpoints are available from:
+
+**[Download TPQ-Net Checkpoints v1.0](https://github.com/wzg673817-cell/TPQ-Net/releases/tag/checkpoints-v1.0.0)**
+
+The checkpoints correspond to clean, 30, 20, 15, 10, 5, and 0 dB conditions and can
+be evaluated using [`03_test_tpqnet.py`](03_test_tpqnet.py).
+
 ## Dataset protocol
 
 The dataset contains six emitter classes and 1,000 samples per emitter, for 6,000
@@ -68,6 +128,7 @@ for validation, and the final 200 samples for testing. This fixed 6:2:2 split yi
 ```text
 pytorch:2.3.0-cuda12.1-python3.10-ubuntu22.04-v09
 ```
+
 ## Build DCT-3T
 
 The default command builds DCT-3T for the clean dataset:
@@ -150,6 +211,26 @@ python 02_train_tpqnet.py \
 | Data normalization | Per-channel standard-deviation normalization |
 | Loss function | Cross-entropy |
 | Best-checkpoint criterion | Validation balanced accuracy |
+
+## Test TPQ-Net
+
+Download the corresponding checkpoint from
+[TPQ-Net Checkpoints v1.0](https://github.com/wzg673817-cell/TPQ-Net/releases/tag/checkpoints-v1.0.0).
+
+Example for the clean condition:
+
+```bash
+python 03_test_tpqnet.py \
+  --data_npz ./generated/dct3/LFM_SEI_clean_iq__dct3_tau2_grid128_disp1.npz \
+  --split_npz ./data/split_622.npz \
+  --checkpoint ./outputs/clean/best_model.pt \
+  --out_dir ./outputs/clean/test_results
+```
+
+The testing script reports accuracy, balanced accuracy, macro precision, macro-F1,
+and Cohen's kappa. It also saves the confusion matrix, per-class metrics, and
+sample-level predictions.
+
 ## Reported performance
 
 | SNR (dB) | Accuracy | Precision | F1 Score | Kappa |
@@ -165,10 +246,17 @@ python 02_train_tpqnet.py \
 
 Small numerical differences may occur across GPU models, CUDA/cuDNN versions, and
 PyTorch versions despite deterministic settings.
-## Data integrity
 
-Use the hashes in `data/SHA256SUMS.txt` to verify the downloaded files. A complete
-consistency check is documented in `VALIDATION_REPORT.md`.
+## Experimental results
+
+Detailed results are available through the following links:
+
+- [Main recognition results](results/main_results.csv)
+- [Input representation comparison](results/Recognition_accuracy_of_different_input_representations.csv)
+- [Backbone network comparison](results/Recognition_accuracy_of_different_backbone_networks.csv)
+- [Ablation study](results/Ablation_study_results_recognition_accuracy.csv)
+- [Normalized confusion matrices](results/confusion_matrices/)
+- [t-SNE feature visualizations](results/feature_visualization/)
 
 ## Citation
 
@@ -177,5 +265,4 @@ please cite the manuscript title shown above.
 
 ## License
 
-The code is released under the MIT License. The dataset is intended for academic
-research use; see `DATA_USE_NOTICE.md`.
+The code is released under the [MIT License](LICENSE).
