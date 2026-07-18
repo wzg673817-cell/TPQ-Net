@@ -1,0 +1,5 @@
+Method	DMS-TPE	QACM Head	LKA	10 dB	5 dB	0 dB	Average
+A: Baseline	×	×	×	81.92	71.00	57.25	70.06
+B: +DMS-TPE	✓	×	×	86.58	76.08	61.50	74.72
+C: +DMS-TPE+QACM	✓	✓	×	88.25	77.08	63.00	76.11
+D: TPQ-Net (Ours)	✓	✓	✓	87.58	78.42	64.17	76.72
